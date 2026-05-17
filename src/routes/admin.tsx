@@ -342,30 +342,37 @@ function CardPreviewModal({ card, onClose }: { card: { code: string; expires_at:
   const wrapRef = useRef<HTMLDivElement>(null);
   const [busy, setBusy] = useState<null | "print" | "download">(null);
   const [scale, setScale] = useState(1);
-  const [isMobile, setIsMobile] = useState(false);
   const expiresLabel = card.expires_at
     ? new Date(card.expires_at).toLocaleDateString("en-GB", { year: "numeric", month: "short", day: "numeric" })
     : "Valid 10 months from activation";
 
-  // Lock body scroll while open + responsive scale based on viewport width
+  // Lock body scroll + ESC to close + responsive scale fitting both width & height
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
     const update = () => {
       const w = window.innerWidth;
-      setIsMobile(w < 640);
-      // On mobile: bottom-sheet ~50vh; card scaled to fit sheet width
-      const sheetPad = w < 640 ? 32 : 40;
-      const maxW = Math.min(w - sheetPad, 460);
-      setScale(Math.min(1, Math.max(0.55, maxW / 420)));
+      const h = window.innerHeight;
+      // chrome (header + actions + paddings) reserved around card
+      const chromeH = 260;
+      const padX = w < 480 ? 28 : 56;
+      const maxByW = Math.min(w - padX, 520);
+      const maxByH = Math.max(180, h - chromeH);
+      // card native = 420x265 (aspect ~1.585)
+      const scaleW = maxByW / 420;
+      const scaleH = maxByH / 265;
+      setScale(Math.min(1.05, Math.max(0.5, Math.min(scaleW, scaleH))));
     };
     update();
     window.addEventListener("resize", update);
     return () => {
       window.removeEventListener("resize", update);
+      window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
     };
-  }, []);
+  }, [onClose]);
 
   async function handleDownload() {
     const node = cardRef.current;
