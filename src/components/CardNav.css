@@ -1,0 +1,150 @@
+.card-nav-container {
+  position: fixed;
+  top: 1em;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 1.5rem);
+  max-width: 880px;
+  z-index: 50;
+  box-sizing: border-box;
+}
+.card-nav {
+  display: block;
+  height: 76px;
+  padding: 0;
+  background-color: oklch(0.12 0 0 / 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid oklch(0.92 0.06 85 / 0.12);
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.02) inset;
+  position: relative;
+  overflow: hidden;
+  will-change: height;
+}
+.card-nav.open { background-color: oklch(0.10 0 0 / 0.96); }
+.card-nav-top {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.9rem 0.5rem 1.1rem;
+  z-index: 2;
+}
+.cn-left {
+  display: flex; align-items: center; height: 100%;
+}
+.hamburger-menu {
+  height: 46px; width: 46px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  cursor: pointer; gap: 6px;
+  border-radius: 999px;
+  transition: background-color 0.25s ease;
+}
+.hamburger-menu:hover { background-color: oklch(0.18 0 0 / 0.6); }
+.hamburger-line {
+  width: 22px; height: 2px;
+  background-color: currentColor;
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.2s ease, margin 0.3s ease;
+  transform-origin: 50% 50%;
+}
+.hamburger-menu.open .hamburger-line:first-child { transform: translateY(4px) rotate(45deg); }
+.hamburger-menu.open .hamburger-line:last-child { transform: translateY(-4px) rotate(-45deg); }
+
+.cn-logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 0.25rem;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.cn-logo-wrap:hover { opacity: 0.9; transform: scale(1.02); }
+.cn-logo {
+  height: 58px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.45));
+}
+
+.card-nav-content {
+  position: absolute;
+  left: 0; right: 0;
+  top: 76px; bottom: 0;
+  padding: 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+.card-nav.open .card-nav-content { visibility: visible; pointer-events: auto; }
+
+.cn-action {
+  position: relative;
+  display: flex; align-items: center; gap: 14px;
+  width: 100%;
+  border-radius: 1.1rem;
+  padding: 14px 16px;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: transform 0.2s ease, background-color 0.25s ease, border-color 0.25s ease;
+  cursor: pointer;
+  font: inherit;
+  text-align: right;
+}
+.cn-action:hover { transform: translateY(-1px); border-color: oklch(0.92 0.06 85 / 0.35); }
+.cn-action:active { transform: translateY(0); }
+.cn-action-primary {
+  background: linear-gradient(135deg, oklch(0.92 0.06 85), oklch(0.78 0.10 75));
+  color: oklch(0.10 0 0);
+  border-color: transparent;
+  box-shadow: 0 8px 24px -10px oklch(0.92 0.06 85 / 0.55);
+}
+.cn-action-ghost {
+  background: linear-gradient(135deg, oklch(0.18 0.005 80), oklch(0.13 0 0));
+  color: oklch(0.95 0.04 85);
+}
+.cn-action-icon {
+  flex-shrink: 0;
+  display: grid; place-items: center;
+  height: 44px; width: 44px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.18);
+}
+.cn-action-primary .cn-action-icon { background: rgba(0,0,0,0.12); color: oklch(0.10 0 0); }
+.cn-action-ghost .cn-action-icon { background: oklch(0.92 0.06 85 / 0.12); color: oklch(0.92 0.06 85); }
+.cn-action-text {
+  display: flex; flex-direction: column;
+  min-width: 0; flex: 1 1 auto;
+}
+.cn-action-label {
+  font-size: 16px; font-weight: 800;
+  letter-spacing: -0.2px;
+  font-family: "Tajawal", system-ui, sans-serif;
+}
+.cn-action-sub {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+.cn-action-arrow { flex-shrink: 0; opacity: 0.7; }
+
+@media (max-width: 768px) {
+  .card-nav-container { width: calc(100% - 1rem); top: 0.6em; }
+  .card-nav { height: 68px; border-radius: 1.25rem; }
+  .card-nav-top { height: 68px; padding: 0.4rem 0.7rem; }
+  .cn-logo { height: 50px; }
+  .hamburger-menu { height: 44px; width: 44px; }
+  .card-nav-content { top: 68px; padding: 0.5rem; gap: 8px; overflow-y: auto; }
+  .cn-action { padding: 12px 14px; border-radius: 1rem; }
+  .cn-action-icon { height: 40px; width: 40px; }
+  .cn-action-label { font-size: 15px; }
+  .cn-action-sub { font-size: 10px; }
+}
