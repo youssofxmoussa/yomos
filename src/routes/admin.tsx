@@ -455,59 +455,85 @@ function CardPreviewModal({ card, onClose }: { card: { code: string; expires_at:
   return (
     <div
       dir="ltr"
-      className="fixed inset-0 z-[60] bg-black/85 backdrop-blur-md fade-up flex"
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 fade-up"
       onClick={onClose}
+      style={{
+        background:
+          "radial-gradient(120% 80% at 50% 20%, rgba(212,177,108,0.10), transparent 55%), rgba(0,0,0,0.82)",
+        backdropFilter: "blur(18px) saturate(140%)",
+        WebkitBackdropFilter: "blur(18px) saturate(140%)",
+      }}
     >
       <div
         ref={wrapRef}
-        className={
-          isMobile
-            ? "relative w-full mt-auto bg-background border-t border-border rounded-t-3xl px-4 pt-5 pb-6 flex flex-col items-center shadow-2xl animate-in slide-in-from-bottom"
-            : "relative w-full max-w-[460px] mx-auto my-auto flex flex-col items-center pt-4 pb-2"
-        }
-        style={
-          isMobile
-            ? {
-                maxHeight: "55vh",
-                paddingBottom: "max(env(safe-area-inset-bottom), 1.25rem)",
-              }
-            : undefined
-        }
         onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-[560px] mx-auto rounded-[28px] p-[1.5px] bg-gradient-to-br from-cream/45 via-cream/10 to-cream/35 shadow-2xl"
+        style={{
+          boxShadow:
+            "0 30px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,177,108,0.08), 0 0 60px -10px rgba(212,177,108,0.18)",
+        }}
       >
-        {/* Grab handle (mobile only) */}
-        {isMobile && (
-          <div className="w-12 h-1.5 rounded-full bg-muted-foreground/30 mb-3 shrink-0" />
-        )}
-        <button
-          onClick={onClose}
-          aria-label="إغلاق"
-          className={
-            isMobile
-              ? "absolute top-3 right-3 size-10 rounded-full bg-secondary border border-border grid place-items-center hover:bg-accent transition z-10 active:scale-95"
-              : "absolute top-0 right-0 size-11 rounded-full bg-secondary border border-border grid place-items-center hover:bg-accent transition z-10 shadow-lg active:scale-95"
-          }
-        >
-          <X className="size-5" />
-        </button>
-        {/* Scaled card */}
-        <div style={{ width: 420 * scale, height: 265 * scale }} className="shrink-0">
-          <div style={{ transform: `scale(${scale})`, transformOrigin: "top left", width: 420, height: 265 }}>
-            <ActivationCardArt ref={cardRef} code={card.code} expiresLabel={expiresLabel} />
+        <div className="relative rounded-[26px] bg-[radial-gradient(120%_80%_at_50%_0%,oklch(0.16_0_0)_0%,oklch(0.08_0_0)_60%,oklch(0.05_0_0)_100%)] px-5 sm:px-8 pt-6 sm:pt-7 pb-5 sm:pb-6 flex flex-col items-center overflow-hidden">
+          {/* Ambient luxe glow */}
+          <div className="pointer-events-none absolute -inset-x-10 -top-24 h-48 bg-[radial-gradient(60%_60%_at_50%_0%,oklch(0.92_0.06_85/0.18),transparent_70%)]" />
+          {/* Gilded grid texture */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.05]"
+            style={{
+              backgroundImage:
+                "linear-gradient(oklch(0.92 0.06 85) 1px, transparent 1px), linear-gradient(90deg, oklch(0.92 0.06 85) 1px, transparent 1px)",
+              backgroundSize: "36px 36px",
+              maskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+            }}
+          />
+
+          {/* Header */}
+          <div className="relative w-full flex items-center justify-between mb-4 sm:mb-5 z-10">
+            <div className="flex flex-col">
+              <span className="text-[10px] font-en uppercase tracking-[0.28em] text-cream/70 flex items-center gap-1.5">
+                <span className="size-1.5 rounded-full bg-cream animate-pulse" /> Yomo Card
+              </span>
+              <span className="text-sm sm:text-base font-black text-foreground mt-0.5">
+                بطاقة التفعيل
+              </span>
+            </div>
+            <button
+              onClick={onClose}
+              aria-label="إغلاق"
+              className="size-10 rounded-full bg-secondary/80 border border-cream/15 grid place-items-center hover:bg-accent hover:border-cream/30 transition active:scale-95"
+            >
+              <X className="size-5" />
+            </button>
           </div>
-        </div>
-        {/* Thumb-friendly action bar */}
-        <div className={`${isMobile ? "mt-4" : "mt-6"} grid grid-cols-3 gap-2.5 w-full font-en max-w-[420px]`}>
+
+          {/* Scaled card */}
+          <div className="relative z-10" style={{ width: 420 * scale, height: 265 * scale }}>
+            <div
+              style={{
+                transform: `scale(${scale})`,
+                transformOrigin: "top left",
+                width: 420,
+                height: 265,
+              }}
+            >
+              <ActivationCardArt ref={cardRef} code={card.code} expiresLabel={expiresLabel} />
+            </div>
+          </div>
+
+          {/* Action bar */}
+          <div className="relative z-10 mt-5 sm:mt-6 grid grid-cols-3 gap-2.5 w-full font-en max-w-[460px]">
             <button
               onClick={() => { navigator.clipboard.writeText(card.code); toast.success("Copied"); }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-1.5 rounded-2xl bg-secondary px-2 py-3 text-xs sm:text-sm font-semibold hover:bg-accent transition active:scale-95 min-h-[52px]"
+              className="flex flex-col sm:flex-row items-center justify-center gap-1.5 rounded-2xl bg-secondary/80 border border-cream/10 px-2 py-3 text-xs sm:text-sm font-semibold hover:bg-accent hover:border-cream/30 transition active:scale-95 min-h-[52px]"
             >
               <Copy className="size-5 sm:size-4" /> <span>Copy</span>
             </button>
             <button
               onClick={handleDownload}
               disabled={busy !== null}
-              className="flex flex-col sm:flex-row items-center justify-center gap-1.5 rounded-2xl border border-cream/30 bg-card px-2 py-3 text-xs sm:text-sm font-semibold hover:bg-secondary transition disabled:opacity-60 active:scale-95 min-h-[52px]"
+              className="flex flex-col sm:flex-row items-center justify-center gap-1.5 rounded-2xl border border-cream/30 bg-card px-2 py-3 text-xs sm:text-sm font-semibold hover:bg-secondary hover:border-cream/50 transition disabled:opacity-60 active:scale-95 min-h-[52px]"
             >
               <Download className="size-5 sm:size-4" /> <span>{busy === "download" ? "..." : "Download"}</span>
             </button>
@@ -519,11 +545,11 @@ function CardPreviewModal({ card, onClose }: { card: { code: string; expires_at:
               <Printer className="size-5 sm:size-4" /> <span>{busy === "print" ? "..." : "Print"}</span>
             </button>
           </div>
-        {!isMobile && (
-          <p className="mt-3 text-[11px] text-muted-foreground/70 text-center font-en">
+
+          <p className="relative z-10 mt-3 text-[10.5px] text-muted-foreground/70 text-center font-en tracking-wide">
             Print uses card-only template · 3.375 × 2.125 in
           </p>
-        )}
+        </div>
       </div>
     </div>
   );
