@@ -788,7 +788,7 @@ function SectionsTab() {
   async function save() {
     if (!active) return;
     const { error } = await supabase.from("site_sections")
-      .update({ content: draft, updated_at: new Date().toISOString() }).eq("id", active.id);
+      .update({ content: draft, updated_at: new Date().toISOString() }).eq("key", active.key);
     if (error) return toast.error(error.message);
     toast.success("تم الحفظ — يظهر مباشرة على الموقع");
     qc.invalidateQueries({ queryKey: ["admin-sections"] });
