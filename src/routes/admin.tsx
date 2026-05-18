@@ -739,7 +739,7 @@ function SessionsTab({ adminId }: { adminId: string }) {
                   </div>
                 )}
                 <div className="text-[11px] text-muted-foreground/70 mt-2 font-en">
-                  بدأ {new Date(s.started_at).toLocaleString("ar")}
+                  بدأ {new Date(s.created_at).toLocaleString("ar")}
                 </div>
               </div>
               <button onClick={() => terminate(s.id)}
