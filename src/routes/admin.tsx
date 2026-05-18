@@ -808,9 +808,9 @@ function SectionsTab() {
       {/* Section list */}
       <aside className="rounded-2xl border border-border bg-card p-2 h-fit lg:sticky lg:top-24">
         {sections.map((s) => {
-          const a = (active?.id === s.id);
+          const a = (active?.key === s.key);
           return (
-            <button key={s.id} onClick={() => { setActiveKey(s.key); setDraft(s.content); }}
+            <button key={s.key} onClick={() => { setActiveKey(s.key); setDraft(s.content); }}
               className={`w-full text-right rounded-xl px-3 py-2.5 mb-1 transition ${
                 a ? "bg-cream-gradient text-background font-bold" : "hover:bg-secondary text-foreground"
               }`}>
