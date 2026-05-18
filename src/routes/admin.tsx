@@ -172,7 +172,7 @@ function CardsTab({ adminId }: { adminId: string }) {
         : "";
       return [c.code, c.status, c.created_at, c.activated_at ?? "", c.expires_at ?? "", days, c.activated_by ?? "", c.notes ?? ""].map(esc).join(",");
     });
-    const summary = `# Yomo Cards Export — ${new Date().toLocaleString("en-GB")}\n# Total: ${cards.length} · Active: ${cards.filter((c)=>c.status==="active").length} · Unused: ${cards.filter((c)=>c.status==="unused").length} · Expired: ${cards.filter((c)=>c.status==="expired").length} · Revoked: ${cards.filter((c)=>c.status==="revoked").length}\n`;
+    const summary = `# Yomo Cards Export — ${new Date().toLocaleString("en-GB")}\n# Total: ${cards.length} · Active: ${cards.filter((c)=>c.status==="active").length} · Used: ${cards.filter((c)=>c.status==="used").length} · Expired: ${cards.filter((c)=>c.status==="expired").length} · Revoked: ${cards.filter((c)=>c.status==="revoked").length}\n`;
     const csv = "\uFEFF" + summary + headers.join(",") + "\n" + rows.join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -186,7 +186,7 @@ function CardsTab({ adminId }: { adminId: string }) {
 
   const stats = {
     total: cards?.length ?? 0,
-    unused: cards?.filter((c) => c.status === "unused").length ?? 0,
+    used: cards?.filter((c) => c.status === "used").length ?? 0,
     active: cards?.filter((c) => c.status === "active").length ?? 0,
     expired: cards?.filter((c) => c.status === "expired").length ?? 0,
   };
@@ -235,7 +235,7 @@ function CardsTab({ adminId }: { adminId: string }) {
                   <td className="p-3">
                     <span className={`rounded-full px-2 py-0.5 text-[10px] font-en uppercase ${
                       c.status === "active" ? "bg-cream/20 text-cream" :
-                      c.status === "unused" ? "bg-secondary text-muted-foreground" :
+                      c.status === "used" ? "bg-secondary text-muted-foreground" :
                       "bg-muted text-muted-foreground/60"
                     }`}>{c.status}</span>
                   </td>
@@ -739,7 +739,7 @@ function SessionsTab({ adminId }: { adminId: string }) {
                   </div>
                 )}
                 <div className="text-[11px] text-muted-foreground/70 mt-2 font-en">
-                  بدأ {new Date(s.started_at).toLocaleString("ar")}
+                  بدأ {new Date(s.created_at).toLocaleString("ar")}
                 </div>
               </div>
               <button onClick={() => terminate(s.id)}
@@ -788,7 +788,7 @@ function SectionsTab() {
   async function save() {
     if (!active) return;
     const { error } = await supabase.from("site_sections")
-      .update({ content: draft, updated_at: new Date().toISOString() }).eq("id", active.id);
+      .update({ content: draft, updated_at: new Date().toISOString() }).eq("key", active.key);
     if (error) return toast.error(error.message);
     toast.success("تم الحفظ — يظهر مباشرة على الموقع");
     qc.invalidateQueries({ queryKey: ["admin-sections"] });
@@ -808,9 +808,9 @@ function SectionsTab() {
       {/* Section list */}
       <aside className="rounded-2xl border border-border bg-card p-2 h-fit lg:sticky lg:top-24">
         {sections.map((s) => {
-          const a = (active?.id === s.id);
+          const a = (active?.key === s.key);
           return (
-            <button key={s.id} onClick={() => { setActiveKey(s.key); setDraft(s.content); }}
+            <button key={s.key} onClick={() => { setActiveKey(s.key); setDraft(s.content); }}
               className={`w-full text-right rounded-xl px-3 py-2.5 mb-1 transition ${
                 a ? "bg-cream-gradient text-background font-bold" : "hover:bg-secondary text-foreground"
               }`}>
