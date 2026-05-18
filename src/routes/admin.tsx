@@ -235,7 +235,7 @@ function CardsTab({ adminId }: { adminId: string }) {
                   <td className="p-3">
                     <span className={`rounded-full px-2 py-0.5 text-[10px] font-en uppercase ${
                       c.status === "active" ? "bg-cream/20 text-cream" :
-                      c.status === "unused" ? "bg-secondary text-muted-foreground" :
+                      c.status === "used" ? "bg-secondary text-muted-foreground" :
                       "bg-muted text-muted-foreground/60"
                     }`}>{c.status}</span>
                   </td>
