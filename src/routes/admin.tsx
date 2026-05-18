@@ -172,7 +172,7 @@ function CardsTab({ adminId }: { adminId: string }) {
         : "";
       return [c.code, c.status, c.created_at, c.activated_at ?? "", c.expires_at ?? "", days, c.activated_by ?? "", c.notes ?? ""].map(esc).join(",");
     });
-    const summary = `# Yomo Cards Export — ${new Date().toLocaleString("en-GB")}\n# Total: ${cards.length} · Active: ${cards.filter((c)=>c.status==="active").length} · Unused: ${cards.filter((c)=>c.status==="unused").length} · Expired: ${cards.filter((c)=>c.status==="expired").length} · Revoked: ${cards.filter((c)=>c.status==="revoked").length}\n`;
+    const summary = `# Yomo Cards Export — ${new Date().toLocaleString("en-GB")}\n# Total: ${cards.length} · Active: ${cards.filter((c)=>c.status==="active").length} · Used: ${cards.filter((c)=>c.status==="used").length} · Expired: ${cards.filter((c)=>c.status==="expired").length} · Revoked: ${cards.filter((c)=>c.status==="revoked").length}\n`;
     const csv = "\uFEFF" + summary + headers.join(",") + "\n" + rows.join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
