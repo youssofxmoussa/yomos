@@ -186,7 +186,7 @@ function CardsTab({ adminId }: { adminId: string }) {
 
   const stats = {
     total: cards?.length ?? 0,
-    unused: cards?.filter((c) => c.status === "unused").length ?? 0,
+    used: cards?.filter((c) => c.status === "used").length ?? 0,
     active: cards?.filter((c) => c.status === "active").length ?? 0,
     expired: cards?.filter((c) => c.status === "expired").length ?? 0,
   };
