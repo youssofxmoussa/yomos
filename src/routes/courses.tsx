@@ -13,7 +13,6 @@ function CoursesPage() {
       const { data, error } = await supabase
         .from("courses")
         .select("id, title, description, subject, grade, price")
-        .eq("published", true)
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data;
